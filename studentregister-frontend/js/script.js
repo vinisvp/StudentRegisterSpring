@@ -69,7 +69,6 @@ function addStudent() {
     }
 
     var student = {
-        id: students.length + 1,
         name: document.getElementById("inputName").value,
         email: document.getElementById("inputEmail").value,
         phone: document.getElementById("inputTel").value,
@@ -77,9 +76,17 @@ function addStudent() {
         period: sh
     }
 
-    document.getElementById("formStudent").reset();
-    students.push(student);
-    addStudentToTable(student);
+    $.ajax({
+        url: "http://localhost:8080/students",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(student),
+        success: (respStudent) => {
+            document.getElementById("formStudent").reset();
+            students.push(respStudent);
+            addStudentToTable(respStudent);
+        }
+    })
 }
 
 loadCourses();
