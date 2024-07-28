@@ -14,7 +14,7 @@
         <h1 class="display-5 text-center">Cadastro de Alunos</h1>
     </header>
     <main>
-        <div class="container bg-white">
+        <div class="container mb-5 bg-white">
             <section> <!--Form-->
                 <h1 class="display-6 my-3">Formulário de Cadastro:</h1>
                 <form onsubmit="addStudent(); return false" id="formStudent">
@@ -34,9 +34,7 @@
                         <label for="inputCourse" class="col-10 col-lg-1 offset-1 form-label">Curso:</label>
                         <div class="col-10 col-lg-4 offset-1 offset-lg-0 mb-4 mb-lg-0">
                             <select class="form-select" aria-label="Seleção de Curso" id="inputCourse" required>
-                                <option value="1">Java</option>
-                                <option value="2">Angular</option>
-                                <option value="3">HTML/CSS</option>
+                                <option value="" selected>Selecione um curso</option>
                             </select>
                         </div>
                         <div class="row mb-3 mb-lg-0">

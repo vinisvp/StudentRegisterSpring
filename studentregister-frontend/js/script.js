@@ -1,13 +1,25 @@
 $("#inputTel").mask("(00) 00000-0000");
 
-var students = [
-    {id: 1, name: "Pedro Antonio", email: "pedro@abutua.com", phone: "(15) 9999-9999", course: 2, shift: 2}
-];
+var courses = [];
+var students = [];
 
-var course = ["Java", "Angular", "HTML/CSS"];
 var shift = ["Manhã", "Tarde", "Noite"];
 
-function addStudentToTable(student){
+function loadCourses(){
+    $.ajax({
+        url: "http://localhost:8080/courses",
+        type: "GET",
+        async: false,
+        success: (response) => {
+            courses = response;
+            for(let course of courses){
+                document.getElementById("inputCourse").innerHTML += `<option value=${course.id}>${course.name}</option>`;
+            }
+        }
+    });
+}
+
+function addStudentToTable(student) {
     var table = document.getElementById("studentsTable");
     var newRow = table.insertRow();
 
@@ -27,40 +39,42 @@ function addStudentToTable(student){
     cell.className = "d-none d-lg-table-cell";
     cell.appendChild(Node);
 
-    Node = document.createTextNode(course[student.course - 1]);
+    Node = document.createTextNode(courses[student.idCourse - 1].name);
     cell = newRow.insertCell();
     cell.className = "d-none d-lg-table-cell";
     cell.appendChild(Node);
 
-    Node = document.createTextNode(shift[student.shift - 1]);
+    Node = document.createTextNode(shift[student.period - 1]);
     cell = newRow.insertCell();
     cell.className = "d-none d-lg-table-cell";
     cell.appendChild(Node);
 }
 
-function showStudents(){
-    for(student of students){
-        addStudentToTable(student);
-    }
+function loadStudents() {
+    $.getJSON("http://localhost:8080/students", (response) => {
+        students = response;
+        for (let student of students) {
+            addStudentToTable(student);
+        }
+    });
 }
 
-function addStudent(){
+function addStudent() {
     var shifts = document.getElementsByName("inputShift");
     var sh = 0;
-    for(s of shifts){
-        if (s.checked)
-        {
+    for (s of shifts) {
+        if (s.checked) {
             sh = parseInt(s.id);
         }
     }
-    
+
     var student = {
         id: students.length + 1,
         name: document.getElementById("inputName").value,
         email: document.getElementById("inputEmail").value,
         phone: document.getElementById("inputTel").value,
-        course: parseInt(document.getElementById("inputCourse").value),
-        shift: sh
+        idCourse: parseInt(document.getElementById("inputCourse").value),
+        period: sh
     }
 
     document.getElementById("formStudent").reset();
@@ -68,4 +82,5 @@ function addStudent(){
     addStudentToTable(student);
 }
 
-showStudents();
+loadCourses();
+loadStudents();
